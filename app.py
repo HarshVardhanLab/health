@@ -24,10 +24,6 @@ def ping_health_endpoint():
 def home():
     return render_template('index.html')
 
-@app.route('/health')
-def health():
-    return jsonify({"status": "ok"})
-
 @app.route('/api/ping')
 def ping():
     """Manual ping endpoint"""
@@ -53,7 +49,7 @@ if __name__ == '__main__':
     ping_thread.start()
     
     # Get port from environment variable (Railway provides this)
-    port = int(os.environ.get('PORT', 5050))
+    port = int(os.environ.get('PORT', 5000))
     
     # Run Flask app
     app.run(host='0.0.0.0', port=port, debug=False)
