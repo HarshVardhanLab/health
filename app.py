@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 import requests
 from datetime import datetime
 
@@ -8,11 +8,7 @@ HEALTH_API_URL = "https://nova-library-backend.onrender.com/api/v1/health/"
 
 @app.route('/')
 def home():
-    return jsonify({
-        "status": "running",
-        "message": "Keep-alive service is active",
-        "target": HEALTH_API_URL
-    })
+    return render_template('index.html')
 
 @app.route('/api/ping')
 def ping():

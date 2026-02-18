@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keep-Alive Service</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .smiley {
+            font-size: 120px;
+            animation: bounce 2s infinite;
+            display: inline-block;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        h1 {
+            margin: 20px 0;
+            font-size: 2.5em;
+        }
+        
+        .status {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+        
+        .api-url {
+            font-size: 0.9em;
+            word-break: break-all;
+            margin: 10px 0;
+            opacity: 0.9;
+        }
+        
+        .pulse {
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .info {
+            margin-top: 30px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="smiley">😊</div>
+        <h1>Keep-Alive Service</h1>
+        <div class="status">
+            <span class="pulse"></span>
+            API's Calling Every Minute
+        </div>
+        <div class="api-url">
+            Target: https://nova-library-backend.onrender.com/api/v1/health/
+        </div>
+        <div class="info">
+            ✨ Your service is staying awake! ✨
+        </div>
+    </div>
+</body>
+</html>
