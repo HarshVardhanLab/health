@@ -1,28 +1,28 @@
 # Keep-Alive Service for Nova Library Backend
 
-A Flask app deployed on Vercel that pings the Nova Library Backend health endpoint every minute to keep it awake.
+A Flask app deployed on Railway that pings the Nova Library Backend health endpoint every 30 seconds to keep it awake.
 
-## Deployment
+## Deployment on Railway
 
-1. Install Vercel CLI:
-```bash
-npm i -g vercel
-```
-
-2. Deploy to Vercel:
-```bash
-vercel
-```
-
-3. Follow the prompts to link your project
+1. Go to [railway.app](https://railway.app)
+2. Sign in with GitHub
+3. Click "New Project"
+4. Select "Deploy from GitHub repo"
+5. Choose your repository
+6. Railway will automatically detect and deploy your Flask app
 
 ## Endpoints
 
-- `/` - Home page showing service status
-- `/api/ping` - Manually trigger a health check (also called by cron)
+- `/` - Home page with animated smiley face
+- `/api/ping` - Manually trigger a health check
 
 ## How it works
 
-Vercel Cron Jobs automatically call `/api/ping` every minute, which then pings the Nova Library Backend health endpoint.
+The app runs a background thread that automatically pings the Nova Library Backend health endpoint every 30 seconds, keeping it awake.
 
-Note: Vercel's free tier cron jobs run every minute minimum. For 30-second intervals, consider upgrading or using a different platform.
+## Local Development
+
+```bash
+pip install -r requirements.txt
+python app.py
+```
