@@ -87,7 +87,7 @@ if __name__ == '__main__':
     ping_thread.start()
 
     # Get port from environment variable
-    port = int(os.environ.get('PORT', 4000))
+    port = int(os.environ.get('PORT', 5000))
 
     # Run Flask app
     app.run(host='0.0.0.0', port=port, debug=False)
