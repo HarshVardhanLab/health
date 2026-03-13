@@ -5,97 +5,234 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Keep-Alive Service</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             color: white;
+            padding: 20px;
         }
-        
-        .container {
+
+        .header {
             text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-bottom: 36px;
         }
-        
+
         .smiley {
-            font-size: 120px;
+            font-size: 80px;
             animation: bounce 2s infinite;
             display: inline-block;
         }
-        
+
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-14px); }
         }
-        
+
         h1 {
-            margin: 20px 0;
-            font-size: 2.5em;
+            margin: 14px 0 6px;
+            font-size: 2.2em;
+            letter-spacing: 1px;
         }
-        
-        .status {
-            font-size: 1.2em;
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+
+        .subtitle {
+            font-size: 1em;
+            opacity: 0.65;
         }
-        
-        .api-url {
-            font-size: 0.9em;
+
+        .cards {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+            padding: 28px 32px;
+            width: 320px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-4px); }
+
+        .card-label {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .card-url {
+            font-size: 0.78em;
             word-break: break-all;
-            margin: 10px 0;
-            opacity: 0.9;
+            opacity: 0.55;
+            margin-bottom: 20px;
         }
-        
-        .pulse {
-            display: inline-block;
-            width: 15px;
-            height: 15px;
-            background: #4ade80;
+
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .dot {
+            width: 13px;
+            height: 13px;
             border-radius: 50%;
+            flex-shrink: 0;
             animation: pulse 1.5s infinite;
-            margin-right: 8px;
         }
-        
+
+        .dot.online  { background: #4ade80; }
+        .dot.offline { background: #f87171; animation: none; }
+        .dot.checking { background: #facc15; }
+
         @keyframes pulse {
             0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            50% { opacity: 0.5; transform: scale(1.25); }
         }
-        
-        .info {
-            margin-top: 30px;
-            font-size: 1.1em;
+
+        .status-text {
+            font-size: 1.05em;
+            font-weight: 500;
         }
+
+        .code-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 2px 10px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .last-checked {
+            font-size: 0.78em;
+            opacity: 0.5;
+        }
+
+        .footer {
+            margin-top: 36px;
+            font-size: 0.9em;
+            opacity: 0.5;
+            text-align: center;
+        }
+
+        .ping-btn {
+            margin-top: 28px;
+            padding: 10px 30px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            color: white;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .ping-btn:hover { background: rgba(255,255,255,0.25); }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="header">
         <div class="smiley">😊</div>
         <h1>Keep-Alive Service</h1>
-        <div class="status">
-            <span class="pulse"></span>
-            API's Calling Every 30 Seconds
+        <p class="subtitle">Pinging every 30 seconds · Keeping services warm</p>
+    </div>
+
+    <div class="cards">
+        <!-- Nova card -->
+        <div class="card" id="card-nova">
+            <div class="card-label">Nova Library Backend</div>
+            <div class="card-url">https://nova-library-backend.onrender.com/api/v1/health/</div>
+            <div class="status-row">
+                <span class="dot checking" id="dot-nova"></span>
+                <span class="status-text" id="status-nova">Checking...</span>
+            </div>
+            <div class="code-badge" id="code-nova">—</div>
+            <div class="last-checked" id="checked-nova">Never checked</div>
         </div>
-        <div class="api-url">
-            Target: https://nova-library-backend.onrender.com/api/v1/health/
-        </div>
-        <div class="info">
-            ✨ Your service is staying awake! ✨
+
+        <!-- Excel card -->
+        <div class="card" id="card-excel">
+            <div class="card-label">Excel Service</div>
+            <div class="card-url">https://excel-153y.onrender.com</div>
+            <div class="status-row">
+                <span class="dot checking" id="dot-excel"></span>
+                <span class="status-text" id="status-excel">Checking...</span>
+            </div>
+            <div class="code-badge" id="code-excel">—</div>
+            <div class="last-checked" id="checked-excel">Never checked</div>
         </div>
     </div>
+
+    <button class="ping-btn" onclick="manualPing()">🔄 Ping Now</button>
+
+    <div class="footer">✨ Your services are staying awake ✨</div>
+
+    <script>
+        function setDotState(dotEl, status) {
+            dotEl.className = 'dot';
+            if (status.includes('Online') || status.includes('✅')) {
+                dotEl.classList.add('online');
+            } else if (status.includes('Offline') || status.includes('❌')) {
+                dotEl.classList.add('offline');
+            } else {
+                dotEl.classList.add('checking');
+            }
+        }
+
+        function updateCards(data) {
+            for (const [key, info] of Object.entries(data)) {
+                const dot = document.getElementById(`dot-${key}`);
+                const statusEl = document.getElementById(`status-${key}`);
+                const codeEl = document.getElementById(`code-${key}`);
+                const checkedEl = document.getElementById(`checked-${key}`);
+
+                if (!dot) continue;
+
+                statusEl.textContent = info.status || 'Checking...';
+                codeEl.textContent = info.code ? `HTTP ${info.code}` : '—';
+                checkedEl.textContent = info.last_checked ? `Last checked: ${info.last_checked}` : 'Never checked';
+                setDotState(dot, info.status || '');
+            }
+        }
+
+        function fetchStatus() {
+            fetch('/api/status')
+                .then(r => r.json())
+                .then(data => updateCards(data))
+                .catch(err => console.error('Status fetch failed:', err));
+        }
+
+        function manualPing() {
+            // Show checking state
+            ['nova','excel'].forEach(key => {
+                document.getElementById(`status-${key}`).textContent = 'Pinging...';
+                const dot = document.getElementById(`dot-${key}`);
+                dot.className = 'dot checking';
+            });
+
+            fetch('/api/ping')
+                .then(r => r.json())
+                .then(() => fetchStatus())
+                .catch(err => console.error('Ping failed:', err));
+        }
+
+        // Fetch status on load, then every 10 seconds
+        fetchStatus();
+        setInterval(fetchStatus, 10000);
+    </script>
 </body>
 </html>
